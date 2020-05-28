@@ -2,72 +2,65 @@ package org.openjfx;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 
 public class Player extends Pane {
 
-    private Rectangle player;
-    private int R;
+    private int size;
     static int score = 0;
 
-    private Rectangle removeBonus = null;
 
-    public Player(int R, Color clr) {
-        this.R = R;
-        player = new Rectangle(R, R, clr);
+    Player(int size, Color clr) {
+        this.size = size;
+        Rectangle player = new Rectangle(size, size, clr);
         getChildren().addAll(player);
     }
 
-    public int getR() {
-        return R;
-    }
-
-    enum Axis {X, Y}
-
-    public void move(Axis axis, int speed) {
-        Bonus.isBonus();
-        for (Rectangle wall : App.walls) {
+    void moveX(int speed) {
+//        Bonus.isBonus();
+        for (Pair wallAndNumber : ControllerGame.walls) {
+            Rectangle wall = (Rectangle) wallAndNumber.getKey();
             if (wall.getBoundsInParent().intersects(this.getBoundsInParent())) {
-                if (axis == Axis.X) {
-                    if (speed > 0) {
-                        if (this.getTranslateX() + R == wall.getTranslateX()) {
-                            this.setTranslateX(this.getTranslateX() - speed);
-                            return;
-                        }
+                if (speed > 0) {
+                    if (this.getTranslateX() + size == wall.getTranslateX()) {
+                        this.setTranslateX(this.getTranslateX() - speed);
+                        return;
                     }
-                    if (speed < 0) {
-                        if (this.getTranslateX() == wall.getTranslateX() + wall.getWidth()) {
-                            this.setTranslateX(this.getTranslateX() - speed);
-                            return;
-                        }
-                    }
-                }
-                if (axis == Axis.Y) {
-                    if (speed > 0) {
-                        if (this.getTranslateY() + R == wall.getTranslateY()) {
-                            this.setTranslateY(this.getTranslateY() - speed);
-                            return;
-                        }
-                    }
-                    if (speed < 0) {
-                        if (this.getTranslateY() == wall.getTranslateY() + wall.getHeight()) {
-                            this.setTranslateY(this.getTranslateY() - speed);
-                            return;
-                        }
+                } else {
+                    if (this.getTranslateX() == wall.getTranslateX() + wall.getWidth()) {
+                        this.setTranslateX(this.getTranslateX() - speed);
+                        return;
                     }
                 }
             }
         }
-        if (axis == Axis.X) {
-            this.setTranslateX(this.getTranslateX() + speed);
-        }
-        if (axis == Axis.Y) {
-            this.setTranslateY(this.getTranslateY() + speed);
-        }
+        this.setTranslateX(this.getTranslateX() + speed);
     }
 
+    void moveY(int speed) {
+//        Bonus.isBonus();
+        for (Pair wallAndNumber : ControllerGame.walls) {
+            Rectangle wall = (Rectangle) wallAndNumber.getKey();
+            if (wall.getBoundsInParent().intersects(this.getBoundsInParent())) {
+                if (speed > 0) {
+                    if (this.getTranslateY() + size == wall.getTranslateY()) {
+                        this.setTranslateY(this.getTranslateY() - speed);
+                        return;
+                    }
+                } else {
+                    if (this.getTranslateY() == wall.getTranslateY() + wall.getHeight()) {
+                        this.setTranslateY(this.getTranslateY() - speed);
+                        return;
+                    }
+                }
+            }
+        }
+        this.setTranslateY(this.getTranslateY() + speed);
+    }
 
-
+    int getSize() {
+        return size;
+    }
 
 }
