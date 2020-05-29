@@ -12,7 +12,7 @@ public class ControllerMenu {
     }
 
     @FXML
-    public void clickStartButton() throws InterruptedException {
+    public void clickStartButton() {
         ControllerGame game = new ControllerGame();
         game.setStage(stage);
         game.startNewGame();

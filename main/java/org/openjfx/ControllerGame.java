@@ -15,7 +15,6 @@ import java.util.Map;
 
 class ControllerGame {
 
-
     private Map<KeyCode, Boolean> keys = new HashMap<>();
     static Pane root;
     private Scene scene;
@@ -73,12 +72,12 @@ class ControllerGame {
         player.moveX(speed);
     }
 
-    public void startNewGame(){
+    void startNewGame(){
         init();
         start();
     }
 
-    public void start() {
+    void start() {
         startGame = true;
 //        player.translateXProperty().addListener((obs, old, newValue) -> {
 //            int offset = newValue.intValue();
@@ -97,7 +96,8 @@ class ControllerGame {
                 Bullet bullet = new Bullet(player.getTranslateX() + (double) player.getSize() / 2,
                     player.getTranslateY() + (double) player.getSize() / 2);
                 ControllerGame.root.getChildren().add(bullet.getRectangle());
-                ControllerGame.bullets.add(bullet);}
+                ControllerGame.bullets.add(bullet);
+            }
             keys.put(keyEvent.getCode(), true);
         });
         scene.setOnKeyReleased(keyEvent -> {
@@ -111,7 +111,7 @@ class ControllerGame {
             public void handle(long l) {
                 if (startGame) {
                     updateBullet();
-                    updateRoot();
+//                    updateRoot();
                     update();
                     Bullet.isHit();
                     Bonus.bonus();
