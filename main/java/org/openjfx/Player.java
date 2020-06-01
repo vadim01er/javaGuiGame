@@ -68,6 +68,7 @@ public class Player extends Pane {
         }
     }
 
+
     int getSize() {
         return size;
     }
