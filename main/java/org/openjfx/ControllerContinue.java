@@ -27,7 +27,7 @@ public class ControllerContinue {
 
     @FXML
     private void clickContinue(ActionEvent actionEvent) throws InterruptedException {
-        ControllerGame game = new ControllerGame();
+        ViewGame game = new ViewGame(stage);
         game.setStage(stage);
         game.start();
     }

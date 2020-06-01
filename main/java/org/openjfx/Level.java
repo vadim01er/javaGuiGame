@@ -40,4 +40,5 @@ public class Level extends Pane {
         oneLevel.add("1111111111");
         levels.add(oneLevel);
     }
+
 }

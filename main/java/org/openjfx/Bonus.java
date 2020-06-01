@@ -6,30 +6,30 @@ import javafx.scene.shape.Rectangle;
 
 public class Bonus extends Pane {
 
-    private static Rectangle removeBonus = null;
+    private Rectangle bonus;
 
-    public static void bonus() {
+    public Rectangle getBonus() {
+        return bonus;
+    }
+
+    public Bonus() {
         int random = (int) Math.floor(Math.random() * 100);
         int x = (int) Math.floor(Math.random() * 1000);
         int y = (int) Math.floor(Math.random() * 400);
-        if (random == 5) {
-            Rectangle rect = new Rectangle(5, 5, Color.RED);
-            rect.setX(x);
-            rect.setY(y);
-            ControllerGame.bonuses.add(rect);
-            ControllerGame.root.getChildren().add(rect);
+        if (true/*random == 5*/) {
+            bonus = new Rectangle(5, 5, Color.RED);
+            bonus.setX(x);
+            bonus.setY(y);
+            getChildren().add(bonus);
         }
     }
 
-    static void isBonus() {
-        ControllerGame.bonuses.forEach((rect) -> {
-            if (ControllerGame.player.getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                removeBonus = rect;
-                Player.score++;
-                System.out.println(Player.score);
-            }
-        });
-        ControllerGame.bonuses.remove(removeBonus);
-        ControllerGame.root.getChildren().remove(removeBonus);
+    public void isBonus() {
+        if (ModelGame.player.getBoundsInParent().intersects(this.getBonus().getBoundsInParent())) {
+            ModelGame.bonuses.remove(this);
+            ModelGame.root.getChildren().remove(this);
+            Player.score++;
+            System.out.println(Player.score);
+        }
     }
 }

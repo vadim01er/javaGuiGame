@@ -13,8 +13,7 @@ public class ControllerMenu {
 
     @FXML
     public void clickStartButton() {
-        ControllerGame game = new ControllerGame();
-        game.setStage(stage);
+        ViewGame game = new ViewGame(stage);
         game.startNewGame();
     }
 }
