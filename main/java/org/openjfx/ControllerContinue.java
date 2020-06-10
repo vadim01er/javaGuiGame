@@ -17,13 +17,16 @@ public class ControllerContinue {
         this.stage = stage;
     }
 
-    public void contin() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/continueGame.fxml"));
-        Parent content = loader.load();
-        loader.getController();
-        Scene scene = new Scene(content);
-        stage.setScene(scene);
+    ControllerContinue(Stage stage){
+
     }
+
+//    void contin() throws IOException {
+//        Parent content = loader.load();
+//        loader.getController();
+//        Scene scene = new Scene(content);
+//        stage.setScene(scene);
+//    }
 
     @FXML
     private void clickContinue(ActionEvent actionEvent) throws InterruptedException {

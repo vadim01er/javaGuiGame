@@ -1,11 +1,7 @@
 package org.openjfx;
 
-
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,45 +9,33 @@ import java.util.Map;
 
 public class ModelGame {
 
-    static Pane root;
-
-    static Map<KeyCode, Boolean> keys = new HashMap<>();
+    Map<KeyCode, Boolean> keys = new HashMap<>();
     static ArrayList<Bonus> bonuses = new ArrayList<>();
-    static ArrayList<Pair<Rectangle, Integer>> walls = new ArrayList<>();
+    static ArrayList<Wall> walls = new ArrayList<>();
     static ArrayList<Bullet> bullets = new ArrayList<>();
 
-    static int speed;
-    static boolean startGame = true;
-
-    static Player player;
-
+    int speed;
+    private int forBullet = 1;
+    private Player player;
     private int levelNumber = 0;
+    private int lengthLevel  = 100;
 
-    ModelGame(Pane root) {
-        this.root = root;
+    private double rootX = 0.0;
+    private double rootY = 0.0;
+
+    private double rootHeight;
+    private double rootWidth;
+
+    ModelGame(double rootHeight, double rootWidth) {
+        this.rootHeight = rootHeight;
+        this.rootWidth = rootWidth;
     }
 
     void init() {
         speed = 1;
-        Level.createLevel(100);
-        ArrayList<String> nowLevel = Level.levels.get(levelNumber);
-        double sizeWallHeight = 40;
-        double sizeWallWidth = 40;
-        for (int i = 0; i < nowLevel.size(); i++) {
-            for (int j = 0; j < nowLevel.get(0).length(); j++) {
-                if (nowLevel.get(i).charAt(j) == '1') {
-                    Rectangle rect = new Rectangle(sizeWallWidth, sizeWallHeight, Color.DARKGRAY);
-                    rect.setTranslateX(i * sizeWallWidth);
-                    rect.setTranslateY(j * sizeWallHeight);
-                    root.getChildren().addAll(rect);
-                    walls.add(new Pair<>(rect, 1 + (int) Math.floor(Math.random() * 4)));
-                }
-            }
-        }
-        player = new Player(20, Color.AQUA);
-        root.getChildren().addAll(player);
-        player.setTranslateX(sizeWallWidth + player.getSize());
-        player.setTranslateY(root.getHeight() / 2 - player.getSize());
+        Level.createLevel(lengthLevel);
+        Wall.createWall(levelNumber);
+        player = new Player(20, 50, rootHeight / 2, Color.AQUA);
     }
 
     private void updatePlayer() {
@@ -65,15 +49,23 @@ public class ModelGame {
 
     private void createBonus() {
         Bonus bonus = new Bonus();
-        root.getChildren().add(bonus);
         bonuses.add(bonus);
     }
 
-    void createBullet(){
-        Bullet bullet = new Bullet(ModelGame.player.getTranslateX() + (double) ModelGame.player.getSize() / 2,
-                ModelGame.player.getTranslateY() + (double) ModelGame.player.getSize() / 2);
-        root.getChildren().add(bullet);
-        bullets.add(bullet);
+    private void updateBonus(){
+        for (int i = 0; i < bonuses.size(); i++){
+//            bonuses.get(i).isBonus();
+        }
+    }
+
+    private void createBullet(){
+        forBullet += 1;
+        if (forBullet % 30 == 0) {
+            forBullet = 1;
+            Bullet bullet = new Bullet(player.getX() + (double) player.getSize() / 2,
+                    player.getY() + (double) player.getSize() / 2);
+            bullets.add(bullet);
+        }
     }
 
     private void updateBullet() {
@@ -81,19 +73,13 @@ public class ModelGame {
             Bullet bul = bullets.get(i);
             bul.update();
             bul.isHit();
-//            bul.checkOutOfBounds();
-        }
-    }
-
-    private void updateBonus(){
-        for (int i = 0; i < bonuses.size(); i++){
-            System.out.println();
-            bonuses.get(i).isBonus();
+            bul.checkOutOfBounds(rootX, rootWidth);
         }
     }
 
     private void updateRoot() {
-        root.setLayoutX(root.getLayoutX() - speed);
+        createBullet();
+        rootX -= speed;
         player.moveX(speed);
     }
 
@@ -109,8 +95,31 @@ public class ModelGame {
         updateBullet();
         updateRoot();
         updatePlayer();
-        createBonus();
-        updateBonus();
+//        createBonus();
+//        updateBonus();
     }
 
+    ArrayList<Bonus> getBonuses() {
+        return bonuses;
+    }
+
+    ArrayList<Wall> getWalls() {
+        return walls;
+    }
+
+    ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
+
+    Player getPlayer() {
+        return player;
+    }
+
+    double getRootX() {
+        return rootX;
+    }
+
+    double getRootY() {
+        return rootY;
+    }
 }

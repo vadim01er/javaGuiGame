@@ -16,15 +16,15 @@ public class ControllerGame {
         scene.setOnKeyPressed(keyEvent -> {
             switch (keyEvent.getCode()) {
                 case ESCAPE: ViewGame.startGame = !ViewGame.startGame; break;
-                case SHIFT: ModelGame.speed = 2; break;
-                case SPACE: modelGame.createBullet(); break;
-                default: ModelGame.keys.put(keyEvent.getCode(), true); break;
+                case SHIFT: modelGame.speed = 2; break;
+//                case SPACE: modelGame.createBullet(); break;
+                default: modelGame.keys.put(keyEvent.getCode(), true); break;
             }
         });
         scene.setOnKeyReleased(keyEvent -> {
             switch (keyEvent.getCode()) {
-                case SHIFT: ModelGame.speed = 1; break;
-                default: ModelGame.keys.put(keyEvent.getCode(), false); break;
+                case SHIFT: modelGame.speed = 1; break;
+                default: modelGame.keys.put(keyEvent.getCode(), false); break;
             }
         });
 //        scene.setOnMouseClicked(mouseEvent -> {});

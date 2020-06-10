@@ -1,64 +1,71 @@
 package org.openjfx;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Pair;
 
-public class Bullet extends Pane {
-
-    private Rectangle bullet;
+class Bullet {
 
     private int speed = 3;
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    int getSpeed() {
-        return speed;
-    }
-
-    public Rectangle getBullet() {
-        return bullet;
-    }
+    private double x;
+    private double y;
+    private double height = 5;
+    private double width = 10;
+    private Color color = Color.RED;
 
     Bullet(double playerX, double playerY) {
-        bullet = new Rectangle(10, 5, Color.RED);
-        bullet.setX(playerX + 20);
-        bullet.setY(playerY);
-        getChildren().add(bullet);
+        this.x = playerX;
+        this.y = playerY;
     }
 
     void update(){
-        this.getBullet().setTranslateX(this.getBullet().getTranslateX() + speed);
+        this.x = this.x + speed;
+//        if (this.getBullet().getTranslateX() > )
     }
 
     void isHit() {
-        for (Pair<Rectangle, Integer> wall : ModelGame.walls) {
-            Rectangle rect = wall.getKey();
-            if (this.getBullet().getBoundsInParent().intersects(rect.getBoundsInParent())) {
-                int health = wall.getValue();
-                ModelGame.root.getChildren().remove(this);
+        for (Wall wall : ModelGame.walls) {
+            if (this.x + this.width > wall.getX() && this.x < wall.getX() && this.y + this.height >= wall.getY() && this.y <= wall.getY() + wall.getHeight()) {
                 ModelGame.bullets.remove(this);
-                ModelGame.walls.remove(wall);
+                int health = wall.getHealth() - 1;
+                wall.setHealth(health);
                 if (health == 0) {
-                    ModelGame.root.getChildren().remove(rect);
-                    return;
+                    ModelGame.walls.remove(wall);
                 }
-                health -= 1;
-                ModelGame.walls.add(new Pair<>(rect, health));
                 return;
             }
         }
     }
 
-    void checkOutOfBounds(){
-        if (this.getBullet().getTranslateX() > Math.abs(ModelGame.root.getLayoutX() + ModelGame.root.getWidth() + 10)) {
-            System.out.println(this.getBullet().getTranslateX());
-            System.out.println(ModelGame.root.getLayoutX() + ModelGame.root.getWidth());
+    void checkOutOfBounds(double rootX, double rootWidth){
+        if (this.x > rootWidth - rootX) {
             ModelGame.bullets.remove(this);
-            ModelGame.root.getChildren().remove(this);
         }
+    }
+
+    double getHeight() {
+        return height;
+    }
+
+    double getWidth() {
+        return width;
+    }
+
+    double getX() {
+        return x;
+    }
+
+    double getY() {
+        return y;
+    }
+
+    Color getColor(){
+        return color;
+    }
+
+    void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    int getSpeed() {
+        return speed;
     }
 }

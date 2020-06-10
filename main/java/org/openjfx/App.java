@@ -10,9 +10,12 @@ import java.io.IOException;
 
 public class App extends Application {
 
+    static FXMLLoader loaderContinue;
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu.fxml"));
+//        loaderContinue = new FXMLLoader(getClass().getResource("/continue.fxml"));
         Parent root = loader.load();
         ControllerMenu contMenu = loader.getController();
         contMenu.setStage(stage);
