@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 
 class Player {
 
+    private int score = 0;
     private int size;
     private double x;
     private double y;
@@ -51,6 +52,20 @@ class Player {
         }
     }
 
+    void checkBonus(){
+        for (int i = 0; i < ModelGame.bonuses.size(); i++) {
+            Bonus bonus = ModelGame.bonuses.get(i);
+            if (this.getX() < bonus.getX() + bonus.getWidth()
+                    && this.getX() + this.getSize() >
+                    bonus.getX()
+                    && this.getY() < bonus.getY() + bonus.getHeight()
+                    && this.getY() + this.getSize() > bonus.getY()){
+                ModelGame.bonuses.remove(bonus);
+                score++;
+            }
+        }
+    }
+
     private void setY(double y) {
         this.y = y;
     }
@@ -71,7 +86,11 @@ class Player {
         return size;
     }
 
-    public Color getColor() {
+    Color getColor() {
         return color;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

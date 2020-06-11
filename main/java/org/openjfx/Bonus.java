@@ -6,22 +6,32 @@ public class Bonus {
 
     private double x;
     private double y;
-    private Color color = Color.GOLD;
+    private int width = 10;
+    private int height = 10;
+    private Color color = Color.AQUA;
 
-    public Bonus() {
-//        int random = (int) Math.floor(Math.random() * 100);
-        int x = (int) Math.floor(Math.random() * 1000);
-        int y = (int) Math.floor(Math.random() * 400);
-        this.x = x;
-        this.y = y;
+    Bonus(int i, int j) {
+        this.x = i * width * 4;
+        this.y = j * height * 4;
     }
 
-//    public void isBonus() {
-//        if (ModelGame.player.getBoundsInParent().intersects(this.getBonus().getBoundsInParent())) {
-//            ModelGame.bonuses.remove(this);
-//            ModelGame.root.getChildren().remove(this);
-//            Player.score++;
-//            System.out.println(Player.score);
-//        }
-//    }
+    double getX() {
+        return x;
+    }
+
+    double getY() {
+        return y;
+    }
+
+    int getWidth() {
+        return width;
+    }
+
+    double getHeight() {
+        return height;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 }

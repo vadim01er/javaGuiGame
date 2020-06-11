@@ -13,28 +13,24 @@ public class ModelGame {
     static ArrayList<Bonus> bonuses = new ArrayList<>();
     static ArrayList<Wall> walls = new ArrayList<>();
     static ArrayList<Bullet> bullets = new ArrayList<>();
+    static ArrayList<Wall> stopLine = new ArrayList<>();
+    Level level = new Level();
 
-    int speed;
-    private int forBullet = 1;
+    int speed = 1;
+    private double forBullet = 0.0;
     private Player player;
     private int levelNumber = 0;
-    private int lengthLevel  = 100;
+    private int lengthLevel  = 20;
 
     private double rootX = 0.0;
     private double rootY = 0.0;
 
-    private double rootHeight;
-    private double rootWidth;
-
-    ModelGame(double rootHeight, double rootWidth) {
-        this.rootHeight = rootHeight;
-        this.rootWidth = rootWidth;
-    }
+    private double rootHeight = 400.0;
+    private double rootWidth = 500.0;
 
     void init() {
-        speed = 1;
-        Level.createLevel(lengthLevel);
-        Wall.createWall(levelNumber);
+        level.createLevel(lengthLevel);
+        level.createWall(levelNumber);
         player = new Player(20, 50, rootHeight / 2, Color.AQUA);
     }
 
@@ -43,25 +39,15 @@ public class ModelGame {
         if (isPressed(KeyCode.UP)) player.moveY(-speed);
         if (isPressed(KeyCode.LEFT)) player.moveX(-speed);
         if (isPressed(KeyCode.RIGHT)) player.moveX(speed);
+        player.checkBonus();
     }
 
     private boolean isPressed(KeyCode keyCode) { return keys.getOrDefault(keyCode, false); }
 
-    private void createBonus() {
-        Bonus bonus = new Bonus();
-        bonuses.add(bonus);
-    }
-
-    private void updateBonus(){
-        for (int i = 0; i < bonuses.size(); i++){
-//            bonuses.get(i).isBonus();
-        }
-    }
-
     private void createBullet(){
-        forBullet += 1;
-        if (forBullet % 30 == 0) {
-            forBullet = 1;
+        forBullet += player.getScore() / 2;
+        if (forBullet > 60) {
+            forBullet = 0.0;
             Bullet bullet = new Bullet(player.getX() + (double) player.getSize() / 2,
                     player.getY() + (double) player.getSize() / 2);
             bullets.add(bullet);
@@ -70,10 +56,10 @@ public class ModelGame {
 
     private void updateBullet() {
         for (int i = 0; i < bullets.size(); i++) {
-            Bullet bul = bullets.get(i);
-            bul.update();
-            bul.isHit();
-            bul.checkOutOfBounds(rootX, rootWidth);
+            Bullet bullet = bullets.get(i);
+            bullet.update();
+            bullet.isHit();
+            bullet.checkOutOfBounds(rootX, rootWidth);
         }
     }
 
@@ -83,20 +69,25 @@ public class ModelGame {
         player.moveX(speed);
     }
 
+    private void checkEndLevel(){
+        if (player.getX() + player.getSize() > stopLine.get(0).getX()){
+            rootX = 0.0;
+            lengthLevel += lengthLevel;
+            levelNumber++;
+            walls.clear();
+            bonuses.clear();
+            bullets.clear();
+            stopLine.clear();
+            level.createLevel(lengthLevel);
+            level.createWall(levelNumber);
+        }
+    }
+
     void updateGame() {
-//        player.translateXProperty().addListener((obs, old, newValue) -> {
-//            int offset = newValue.intValue();
-//            root.setLayoutX((root.getWidth() / 2) - player.getSize() - offset);
-//        });
-//        player.translateYProperty().addListener((obs, old, newValue) -> {
-//            int offset = newValue.intValue();
-//            root.setLayoutY((root.getHeight() / 2) - player.getSize() - offset);
-//        });
         updateBullet();
         updateRoot();
         updatePlayer();
-//        createBonus();
-//        updateBonus();
+        checkEndLevel();
     }
 
     ArrayList<Bonus> getBonuses() {
@@ -122,4 +113,16 @@ public class ModelGame {
     double getRootY() {
         return rootY;
     }
+
+    ArrayList<Wall> getEndLine() {
+        return stopLine;
+    }
 }
+//        player.translateXProperty().addListener((obs, old, newValue) -> {
+//            int offset = newValue.intValue();
+//            root.setLayoutX((root.getWidth() / 2) - player.getSize() - offset);
+//        });
+//        player.translateYProperty().addListener((obs, old, newValue) -> {
+//            int offset = newValue.intValue();
+//            root.setLayoutY((root.getHeight() / 2) - player.getSize() - offset);
+//        });

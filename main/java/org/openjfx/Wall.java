@@ -2,41 +2,26 @@ package org.openjfx;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-
 class Wall {
 
-    private static double height = 40;
-    private static double width = 40;
+    private double height = 40;
+    private double width = 40;
     private Color color = Color.DARKGRAY;
     private int health;
     private double x;
     private double y;
 
-    private Wall(double x, double y){
+    Wall(double i, double j){
         this.health = 1 + (int) Math.floor(Math.random() * 4);
-        this.x= x;
-        this.y = y;
+        this.x= i * width;
+        this.y = j * height;
     }
 
-    private Wall(double x, double y, Color color){
+    Wall(double i, double j, Color color){
         this.health = 1 + (int) Math.floor(Math.random() * 4);
-        this.x= x;
-        this.y = y;
+        this.x= i * width;
+        this.y = j * height;
         this.color = color;
-    }
-
-    static void createWall(int levelNumber){
-        ArrayList<String> nowLevel = Level.levels.get(levelNumber);
-        for (int i = 0; i < nowLevel.size(); i++) {
-            for (int j = 0; j < nowLevel.get(0).length(); j++) {
-                if (nowLevel.get(i).charAt(j) == '1') {
-                    Wall wall = new Wall(i * width,j * height);
-                    ModelGame.walls.add(wall);
-                }
-            }
-        }
-
     }
 
     double getX() {
