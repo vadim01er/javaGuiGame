@@ -35,10 +35,10 @@ public class ModelGame {
     }
 
     private void updatePlayer() {
-        if (isPressed(KeyCode.DOWN)) player.moveY(speed);
-        if (isPressed(KeyCode.UP)) player.moveY(-speed);
-        if (isPressed(KeyCode.LEFT)) player.moveX(-speed);
-        if (isPressed(KeyCode.RIGHT)) player.moveX(speed);
+        if (isPressed(KeyCode.DOWN)) player.moveY(speed, walls);
+        if (isPressed(KeyCode.UP)) player.moveY(-speed, walls);
+        if (isPressed(KeyCode.LEFT)) player.moveX(-speed, walls);
+        if (isPressed(KeyCode.RIGHT)) player.moveX(speed, walls);
         player.checkBonus(bonuses);
     }
 
@@ -66,7 +66,7 @@ public class ModelGame {
     private void updateRoot() {
         createBullet();
         rootX -= speed;
-        player.moveX(speed);
+        player.moveX(speed, walls);
     }
 
     private void checkEndLevel(){
