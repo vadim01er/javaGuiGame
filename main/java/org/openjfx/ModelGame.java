@@ -10,10 +10,10 @@ import java.util.Map;
 public class ModelGame {
 
     Map<KeyCode, Boolean> keys = new HashMap<>();
-    static ArrayList<Bonus> bonuses = new ArrayList<>();
-    static ArrayList<Wall> walls = new ArrayList<>();
-    static ArrayList<Bullet> bullets = new ArrayList<>();
-    static ArrayList<Wall> stopLine = new ArrayList<>();
+    private ArrayList<Bonus> bonuses = new ArrayList<>();
+    private ArrayList<Wall> walls = new ArrayList<>();
+    private ArrayList<Bullet> bullets = new ArrayList<>();
+    private ArrayList<Wall> stopLine = new ArrayList<>();
     Level level = new Level();
 
     int speed = 1;
@@ -30,7 +30,7 @@ public class ModelGame {
 
     void init() {
         level.createLevel(lengthLevel);
-        level.createWall(levelNumber);
+        level.createWall(levelNumber, walls, bonuses, stopLine);
         player = new Player(20, 50, rootHeight / 2, Color.AQUA);
     }
 
@@ -39,7 +39,7 @@ public class ModelGame {
         if (isPressed(KeyCode.UP)) player.moveY(-speed);
         if (isPressed(KeyCode.LEFT)) player.moveX(-speed);
         if (isPressed(KeyCode.RIGHT)) player.moveX(speed);
-        player.checkBonus();
+        player.checkBonus(bonuses);
     }
 
     private boolean isPressed(KeyCode keyCode) { return keys.getOrDefault(keyCode, false); }
@@ -78,8 +78,10 @@ public class ModelGame {
             bonuses.clear();
             bullets.clear();
             stopLine.clear();
+            player.setX(50);
+            player.setY(rootHeight / 2);
             level.createLevel(lengthLevel);
-            level.createWall(levelNumber);
+            level.createWall(levelNumber, walls, bonuses, stopLine);
         }
     }
 

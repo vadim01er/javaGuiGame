@@ -41,24 +41,24 @@ class Level {
         levels.add(oneLevel);
     }
 
-    void createWall(int levelNumber){
+    void createWall(int levelNumber, ArrayList<Wall> walls, ArrayList<Bonus> bonuses, ArrayList<Wall> stopLine){
         ArrayList<String> nowLevel = levels.get(levelNumber);
         for (int i = 0; i < nowLevel.size(); i++) {
             for (int j = 0; j < nowLevel.get(0).length(); j++) {
                 switch (nowLevel.get(i).charAt(j)){
                     case '1': {
                         Wall wall = new Wall(i, j);
-                        ModelGame.walls.add(wall);
+                        walls.add(wall);
                         break;
                     }
                     case '2': {
                         Bonus bonus = new Bonus(i, j);
-                        ModelGame.bonuses.add(bonus);
+                        bonuses.add(bonus);
                         break;
                     }
                     case '3': {
                         Wall wall = new Wall(i, j, Color.GOLD);
-                        ModelGame.stopLine.add(wall);
+                        stopLine.add(wall);
                         break;
                     }
                     default:break;

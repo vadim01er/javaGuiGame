@@ -2,6 +2,8 @@ package org.openjfx;
 
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 class Player {
 
     private int score = 0;
@@ -17,9 +19,9 @@ class Player {
         this.color = color;
     }
 
-    void moveX(int speed) {
+    void moveX(int speed, ArrayList<Wall> walls) {
         for (int i = 0; i < Math.abs(speed); i++) {
-            for (Wall wall : ModelGame.walls) {
+            for (Wall wall : walls) {
                 if ((this.getY() + this.getSize() > wall.getY() && this.getY() < wall.getY() + wall.getWidth())) {
                     if (speed > 0) {
                         if (this.getX() + this.size >= wall.getX() & this.getX() < wall.getX()) {
@@ -36,9 +38,9 @@ class Player {
         }
     }
 
-    void moveY(int speed) {
+    void moveY(int speed, ArrayList<Wall> walls) {
         for (int i = 0; i < Math.abs(speed); i++) {
-            for (Wall wall : ModelGame.walls) {
+            for (Wall wall : walls) {
                 if (this.getX() + this.getSize() > wall.getX() && this.getX() < wall.getX() + wall.getWidth()) {
                     if (this.getY() + this.size >= wall.getY() & this.getY() < wall.getY()) {
                         this.setY(this.getY() - 1);
@@ -52,25 +54,25 @@ class Player {
         }
     }
 
-    void checkBonus(){
-        for (int i = 0; i < ModelGame.bonuses.size(); i++) {
-            Bonus bonus = ModelGame.bonuses.get(i);
+    void checkBonus(ArrayList<Bonus> bonuses){
+        for (int i = 0; i < bonuses.size(); i++) {
+            Bonus bonus = bonuses.get(i);
             if (this.getX() < bonus.getX() + bonus.getWidth()
                     && this.getX() + this.getSize() >
                     bonus.getX()
                     && this.getY() < bonus.getY() + bonus.getHeight()
                     && this.getY() + this.getSize() > bonus.getY()){
-                ModelGame.bonuses.remove(bonus);
+                bonuses.remove(bonus);
                 score++;
             }
         }
     }
 
-    private void setY(double y) {
+    void setY(double y) {
         this.y = y;
     }
 
-    private void setX(double x) {
+    void setX(double x) {
         this.x = x;
     }
 
