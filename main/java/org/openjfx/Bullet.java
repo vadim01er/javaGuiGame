@@ -2,6 +2,8 @@ package org.openjfx;
 
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 class Bullet {
 
     private int speed = 3;
@@ -18,26 +20,25 @@ class Bullet {
 
     void update(){
         this.x = this.x + speed;
-//        if (this.getBullet().getTranslateX() > )
     }
 
-    void isHit() {
-        for (Wall wall : ModelGame.walls) {
+    void isHit(ArrayList<Wall> walls, ArrayList<Bullet> bullets) {
+        for (Wall wall : walls) {
             if (this.x + this.width > wall.getX() && this.x < wall.getX() && this.y + this.height >= wall.getY() && this.y <= wall.getY() + wall.getHeight()) {
-                ModelGame.bullets.remove(this);
+                bullets.remove(this);
                 int health = wall.getHealth() - 1;
                 wall.setHealth(health);
                 if (health == 0) {
-                    ModelGame.walls.remove(wall);
+                    walls.remove(wall);
                 }
                 return;
             }
         }
     }
 
-    void checkOutOfBounds(double rootX, double rootWidth){
+    void checkOutOfBounds(double rootX, double rootWidth, ArrayList<Bullet> bullets){
         if (this.x > rootWidth - rootX) {
-            ModelGame.bullets.remove(this);
+            bullets.remove(this);
         }
     }
 

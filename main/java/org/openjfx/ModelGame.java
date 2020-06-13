@@ -17,14 +17,13 @@ public class ModelGame {
     Level level = new Level();
 
     int speed = 1;
-    private double forBullet = 0.0;
+    private double forBullet = 1.0;
     private Player player;
     private int levelNumber = 0;
     private int lengthLevel  = 20;
 
     private double rootX = 0.0;
     private double rootY = 0.0;
-
     private double rootHeight = 400.0;
     private double rootWidth = 500.0;
 
@@ -32,6 +31,13 @@ public class ModelGame {
         level.createLevel(lengthLevel);
         level.createWall(levelNumber, walls, bonuses, stopLine);
         player = new Player(20, 50, rootHeight / 2, Color.AQUA);
+    }
+
+    void updateGame() {
+        updateBullet();
+        updateRoot();
+        updatePlayer();
+        checkEndLevel();
     }
 
     private void updatePlayer() {
@@ -58,8 +64,8 @@ public class ModelGame {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
             bullet.update();
-            bullet.isHit();
-            bullet.checkOutOfBounds(rootX, rootWidth);
+            bullet.isHit(walls, bullets);
+            bullet.checkOutOfBounds(rootX, rootWidth, bullets);
         }
     }
 
@@ -83,13 +89,6 @@ public class ModelGame {
             level.createLevel(lengthLevel);
             level.createWall(levelNumber, walls, bonuses, stopLine);
         }
-    }
-
-    void updateGame() {
-        updateBullet();
-        updateRoot();
-        updatePlayer();
-        checkEndLevel();
     }
 
     ArrayList<Bonus> getBonuses() {

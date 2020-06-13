@@ -2,7 +2,7 @@ package org.openjfx;
 
 import javafx.scene.paint.Color;
 
-public class Bonus {
+class Bonus {
 
     private double x;
     private double y;
