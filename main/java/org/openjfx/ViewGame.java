@@ -14,6 +14,7 @@ class ViewGame {
 
     static boolean startGame = true;
 
+
     ViewGame(Stage stage){
         this.stage = stage;
     }
