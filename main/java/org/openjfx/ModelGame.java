@@ -5,9 +5,10 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-public class ModelGame {
+class ModelGame {
 
     Map<KeyCode, Boolean> keys = new HashMap<>();
     private ArrayList<Bonus> bonuses = new ArrayList<>();
@@ -21,6 +22,7 @@ public class ModelGame {
     private Player player;
     private int levelNumber = 0;
     private int lengthLevel  = 20;
+    boolean startGame = true;
 
     private double rootX = 0.0;
     private double rootY = 0.0;
@@ -29,8 +31,11 @@ public class ModelGame {
 
     void init() {
         level.createLevel(lengthLevel);
-        level.createWall(levelNumber, walls, bonuses, stopLine);
-        player = new Player(20, 50, rootHeight / 2, Color.AQUA);
+        level.createWall(levelNumber);
+        walls = level.getWalls();
+        bonuses = level.getBonuses();
+        stopLine = level.getStopLine();
+        player = new Player( 50, rootHeight / 2,20, 20, Color.AQUA);
     }
 
     void updateGame() {
@@ -43,9 +48,20 @@ public class ModelGame {
     private void updatePlayer() {
         if (isPressed(KeyCode.DOWN)) player.moveY(speed, walls);
         if (isPressed(KeyCode.UP)) player.moveY(-speed, walls);
-        if (isPressed(KeyCode.LEFT)) player.moveX(-speed, walls);
-        if (isPressed(KeyCode.RIGHT)) player.moveX(speed, walls);
-        player.checkBonus(bonuses);
+        if (isPressed(KeyCode.LEFT)) player.moveX(-speed, rootX, rootWidth, walls);
+        if (isPressed(KeyCode.RIGHT)) player.moveX(speed, rootX, rootWidth, walls);
+        for (Iterator i = bonuses.iterator(); i.hasNext();){
+            Bonus bonus = (Bonus) i.next();
+            if (player.checkBonus(bonus)){
+                i.remove();
+            }
+        }
+        if (player.checkOutOfLevel(rootX)) {
+            player.setScore(1);
+            player.setX(50);
+            player.setY(rootHeight / 2);
+            rootX = 0.0;
+        }
     }
 
     private boolean isPressed(KeyCode keyCode) { return keys.getOrDefault(keyCode, false); }
@@ -53,30 +69,39 @@ public class ModelGame {
     private void createBullet(){
         forBullet += player.getScore() / 2;
         if (forBullet > 60) {
-            forBullet = 0.0;
-            Bullet bullet = new Bullet(player.getX() + (double) player.getSize() / 2,
-                    player.getY() + (double) player.getSize() / 2);
+            forBullet = 1.0;
+            Bullet bullet = new Bullet(player.getX() + (double) player.getWidth() / 2,
+                    player.getY() + (double) player.getHeight() / 2);
             bullets.add(bullet);
         }
     }
 
     private void updateBullet() {
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet bullet = bullets.get(i);
+        for (Iterator bulletIterator = bullets.iterator(); bulletIterator.hasNext();) {
+            Bullet bullet = (Bullet) bulletIterator.next();
             bullet.update();
-            bullet.isHit(walls, bullets);
-            bullet.checkOutOfBounds(rootX, rootWidth, bullets);
+            for (Iterator j = walls.iterator(); j.hasNext();) {
+                Wall wall = (Wall) j.next();
+                if (bullet.isHit(wall)) {
+                    bulletIterator.remove();
+                    int health = wall.getHealth() - 1;
+                    if (health == 0) j.remove();
+                    else wall.setHealth(health);
+                    return;
+                }
+            }
+            if (bullet.checkOutOfBounds(rootX, rootWidth)) bulletIterator.remove();
         }
     }
 
     private void updateRoot() {
         createBullet();
         rootX -= speed;
-        player.moveX(speed, walls);
+        player.moveX(speed, rootX, rootWidth, walls);
     }
 
     private void checkEndLevel(){
-        if (player.getX() + player.getSize() > stopLine.get(0).getX()){
+        if (player.getX() + player.getWidth() > stopLine.get(0).getX()){
             rootX = 0.0;
             lengthLevel += lengthLevel;
             levelNumber++;
@@ -87,7 +112,10 @@ public class ModelGame {
             player.setX(50);
             player.setY(rootHeight / 2);
             level.createLevel(lengthLevel);
-            level.createWall(levelNumber, walls, bonuses, stopLine);
+            level.createWall(levelNumber);
+            walls = level.getWalls();
+            bonuses = level.getBonuses();
+            stopLine = level.getStopLine();
         }
     }
 

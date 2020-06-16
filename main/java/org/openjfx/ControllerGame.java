@@ -6,6 +6,7 @@ public class ControllerGame {
 
     private Scene scene;
     private ModelGame modelGame;
+    private ViewGame viewGame;
 
     ControllerGame(Scene scene, ModelGame modelGame){
         this.scene = scene;
@@ -15,7 +16,7 @@ public class ControllerGame {
     void addListener(){
         scene.setOnKeyPressed(keyEvent -> {
             switch (keyEvent.getCode()) {
-                case ESCAPE: ViewGame.startGame = !ViewGame.startGame; break;
+                case ESCAPE: modelGame.startGame= !modelGame.startGame; break;
                 case SHIFT: modelGame.speed = 2; break;
 //                case SPACE: modelGame.createBullet(); break;
                 default: modelGame.keys.put(keyEvent.getCode(), true); break;

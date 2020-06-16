@@ -12,8 +12,7 @@ class ViewGame {
     private ModelGame modelGame;
     private Stage stage;
 
-    static boolean startGame = true;
-
+    boolean startGame = true;
 
     ViewGame(Stage stage){
         this.stage = stage;
@@ -41,7 +40,7 @@ class ViewGame {
         root.setLayoutY(modelGame.getRootY());
 
         Player player = modelGame.getPlayer();
-        Rectangle playerRoot = new Rectangle(player.getX(), player.getY(), player.getSize(), player.getSize());
+        Rectangle playerRoot = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
         playerRoot.setFill(player.getColor());
         root.getChildren().add(playerRoot);
 
@@ -68,7 +67,6 @@ class ViewGame {
             wallRoot.setFill(bonus.getColor());
             root.getChildren().add(wallRoot);
         }
-
     }
 
     void start() {
@@ -80,6 +78,7 @@ class ViewGame {
                     modelGame.updateGame();
                     rewrite();
                 }
+                startGame = modelGame.startGame;
             }
         };
         timer.start();

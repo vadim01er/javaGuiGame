@@ -6,11 +6,14 @@ import java.util.ArrayList;
 
 class Level {
 
+    private ArrayList<Bonus> bonuses = new ArrayList<>();
+    private ArrayList<Wall> walls = new ArrayList<>();
+    private ArrayList<Wall> stopLine = new ArrayList<>();
+
     private ArrayList<ArrayList<String>> levels = new ArrayList<>();
-    private ArrayList<String> oneLevel;
 
     void createLevel(int size) {
-        oneLevel = new ArrayList<>();
+        ArrayList<String> oneLevel = new ArrayList<>();
         oneLevel.add("1111111111");
         for (int i = 0; i < 5; i++) oneLevel.add("1000000001");
         for (int i = 0; i < size - 11; i++) {
@@ -32,7 +35,7 @@ class Level {
     }
 
     void createLevelForTest(){
-        oneLevel = new ArrayList<>();
+        ArrayList<String> oneLevel = new ArrayList<>();
         oneLevel.add("1111111111");
         for (int i = 0; i < 10; i++) {
             oneLevel.add("1000000001");
@@ -41,23 +44,23 @@ class Level {
         levels.add(oneLevel);
     }
 
-    void createWall(int levelNumber, ArrayList<Wall> walls, ArrayList<Bonus> bonuses, ArrayList<Wall> stopLine){
+    void createWall(int levelNumber/*, ArrayList<Wall> walls, ArrayList<Bonus> bonuses, ArrayList<Wall> stopLine*/){
         ArrayList<String> nowLevel = levels.get(levelNumber);
         for (int i = 0; i < nowLevel.size(); i++) {
             for (int j = 0; j < nowLevel.get(0).length(); j++) {
                 switch (nowLevel.get(i).charAt(j)){
                     case '1': {
-                        Wall wall = new Wall(i, j);
+                        Wall wall = new Wall(i, j, 40 , 40);
                         walls.add(wall);
                         break;
                     }
                     case '2': {
-                        Bonus bonus = new Bonus(i, j);
+                        Bonus bonus = new Bonus(i * 40,j * 40, 10, 10);
                         bonuses.add(bonus);
                         break;
                     }
                     case '3': {
-                        Wall wall = new Wall(i, j, Color.GOLD);
+                        Wall wall = new Wall(i, j,40,40, Color.GOLD);
                         stopLine.add(wall);
                         break;
                     }
@@ -65,9 +68,17 @@ class Level {
                 }
             }
         }
-
     }
 
+    ArrayList<Bonus> getBonuses() {
+        return bonuses;
+    }
 
+    ArrayList<Wall> getWalls() {
+        return walls;
+    }
 
+    ArrayList<Wall> getStopLine() {
+        return stopLine;
+    }
 }
