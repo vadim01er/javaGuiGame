@@ -119,6 +119,7 @@ class ModelGame {
         }
     }
 
+
     ArrayList<Bonus> getBonuses() {
         return bonuses;
     }
