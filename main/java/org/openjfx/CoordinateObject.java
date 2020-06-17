@@ -18,6 +18,14 @@ class CoordinateObject {
         this.color = color;
     }
 
+    boolean checkOutLevelLeft(double rootX) {
+        return this.getX() < -rootX;
+    }
+    boolean isCollision(CoordinateObject object){
+        return this.getX() < object.getX() && this.getX() + this.getWidth() > object.getX()
+                && this.getY() < object.getY() + object.getHeight() && this.getY() + this.getHeight() > object.getY();
+    }
+
     double getX() {
         return x;
     }

@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 class Level {
 
+    private ArrayList<ArrayList<String>> levels = new ArrayList<>();
+
     private ArrayList<Bonus> bonuses = new ArrayList<>();
     private ArrayList<Wall> walls = new ArrayList<>();
     private ArrayList<Wall> stopLine = new ArrayList<>();
-
-    private ArrayList<ArrayList<String>> levels = new ArrayList<>();
 
     void createLevel(int size) {
         ArrayList<String> oneLevel = new ArrayList<>();
@@ -37,14 +37,14 @@ class Level {
     void createLevelForTest(){
         ArrayList<String> oneLevel = new ArrayList<>();
         oneLevel.add("1111111111");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             oneLevel.add("1000000001");
         }
         oneLevel.add("1111111111");
         levels.add(oneLevel);
     }
 
-    void createWall(int levelNumber/*, ArrayList<Wall> walls, ArrayList<Bonus> bonuses, ArrayList<Wall> stopLine*/){
+    void createWall(int levelNumber){
         ArrayList<String> nowLevel = levels.get(levelNumber);
         for (int i = 0; i < nowLevel.size(); i++) {
             for (int j = 0; j < nowLevel.get(0).length(); j++) {

@@ -38,6 +38,15 @@ class ModelGame {
         player = new Player( 50, rootHeight / 2,20, 20, Color.AQUA);
     }
 
+    void initForTest() {
+        level.createLevelForTest();
+        level.createWall(0);
+        walls = level.getWalls();
+        bonuses = level.getBonuses();
+        stopLine = level.getStopLine();
+        player = new Player( 50, rootHeight / 2,20, 20, Color.AQUA);
+    }
+
     void updateGame() {
         updateBullet();
         updateRoot();
@@ -52,11 +61,10 @@ class ModelGame {
         if (isPressed(KeyCode.RIGHT)) player.moveX(speed, rootX, rootWidth, walls);
         for (Iterator i = bonuses.iterator(); i.hasNext();){
             Bonus bonus = (Bonus) i.next();
-            if (player.checkBonus(bonus)){
-                i.remove();
-            }
+            if (player.isBonus(bonus)){ i.remove(); }
         }
-        if (player.checkOutOfLevel(rootX)) {
+        if (player.checkOutLevelLeft(rootX)) {
+            forBullet = 10.0;
             player.setScore(1);
             player.setX(50);
             player.setY(rootHeight / 2);
@@ -75,8 +83,13 @@ class ModelGame {
             bullets.add(bullet);
         }
     }
+    void createBulletForTest(){
+        Bullet bullet = new Bullet(player.getX() + (double) player.getWidth() / 2,
+                player.getY() + (double) player.getHeight() / 2);
+        bullets.add(bullet);
+    }
 
-    private void updateBullet() {
+    void updateBullet() {
         for (Iterator bulletIterator = bullets.iterator(); bulletIterator.hasNext();) {
             Bullet bullet = (Bullet) bulletIterator.next();
             bullet.update();

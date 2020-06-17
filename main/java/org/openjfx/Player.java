@@ -12,7 +12,7 @@ class Player extends CoordinateObject {
         super(x, y, width, height, color);
     }
 
-    void moveX(int speed,double rootX, double rootWidth, ArrayList<Wall> walls) {
+    void moveX(int speed, double rootX, double rootWidth, ArrayList<Wall> walls) {
         for (int i = 0; i < Math.abs(speed); i++) {
             for (Wall wall : walls) {
                 if ((this.getY() + this.getHeight() > wall.getY() && this.getY() < wall.getY() + wall.getWidth())) {
@@ -21,7 +21,7 @@ class Player extends CoordinateObject {
                             this.setX(this.getX() - 1);
                         }
                     } else {
-                        if (this.getX() <= wall.getX() + wall.getWidth() & this.getX() + this.getWidth() > wall.getX() + wall.getWidth()) {
+                        if (this.getX() <= wall.getX() + wall.getWidth() && this.getX() + this.getWidth() > wall.getX() + wall.getWidth()) {
                             this.setX(this.getX() + 1);
                         }
                     }
@@ -36,10 +36,10 @@ class Player extends CoordinateObject {
         for (int i = 0; i < Math.abs(speed); i++) {
             for (Wall wall : walls) {
                 if (this.getX() + this.getWidth() > wall.getX() && this.getX() < wall.getX() + wall.getWidth()) {
-                    if (this.getY() + this.getHeight() >= wall.getY() & this.getY() < wall.getY()) {
+                    if (this.getY() + this.getHeight() >= wall.getY() && this.getY() < wall.getY()) {
                         this.setY(this.getY() - 1);
                     }
-                    if (this.getY() <= wall.getY() + wall.getHeight() & this.getY() + this.getHeight() > wall.getY() + wall.getHeight()) {
+                    if (this.getY() <= wall.getY() + wall.getHeight() && this.getY() + this.getHeight() > wall.getY() + wall.getHeight()) {
                         this.setY(this.getY() + 1);
                     }
                 }
@@ -48,19 +48,12 @@ class Player extends CoordinateObject {
         }
     }
 
-    boolean checkBonus(Bonus bonus) {
-        if (this.getX() < bonus.getX() + bonus.getWidth()
-                && this.getX() + this.getWidth() > bonus.getX()
-                && this.getY() < bonus.getY() + bonus.getHeight()
-                && this.getY() + this.getHeight() > bonus.getY()) {
+    boolean isBonus(Bonus bonus) {
+        if (this.isCollision(bonus)) {
             score++;
             return true;
         }
         return false;
-    }
-
-    boolean checkOutOfLevel(double rootX){
-        return this.getX() < -rootX;
     }
 
     int getScore() {
